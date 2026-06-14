@@ -1,18 +1,15 @@
 # Próximos pasos (Fase 2)
 
-La Fase 1 dejó listos **la pregunta, los antecedentes, la metodología y el denominador** (producción
-por operador). La Fase 2 suma el **numerador satelital**. En orden de solidez:
+La Fase 1 dejó listos la pregunta, los antecedentes, la metodología y el denominador. El **flaring →
+CO₂ por operador ya está hecho** ([resultado](flaring.md)). Lo que sigue:
 
-## 1. Flaring → CO₂ por operador  (lo más firme)
+## 1. Flaring → CO₂ por operador  ✅ hecho
 
-- Descargar **VIIRS Nightfire** (Earth Observation Group, [eogdata.mines.edu](https://eogdata.mines.edu))
-  — requiere una **cuenta gratuita**. Filtrar sitios en el AOI de Vaca Muerta, 2023–2025.
-- Asignar cada antorcha a su **concesión/operador** (cruce con `concesiones_neuquina.geojson`).
-- Convertir volumen quemado → **CO₂** (+ CH₄ *slip*) y dividir por la producción → **kg CO₂/BOE** y
-  **% de gas quemado** por operador.
-- Entregable: ranking de operadores por **intensidad de flaring**, mapa de antorchas, serie temporal.
+VIIRS Nightfire 2024 → 113 antorchas → CO₂ por operador e **intensidad por barril**. Ver
+[Flaring](flaring.md). Posibles mejoras: **serie temporal** (2012–2024) para ver la tendencia, y afinar
+el factor de conversión por composición del gas.
 
-## 2. Metano de cuenca y por clúster  (ambicioso)
+## 2. Metano de cuenca y por clúster  (lo siguiente, ambicioso)
 
 - Traer **TROPOMI / Sentinel-5P** XCH₄ sobre el AOI (Copernicus / GES DISC) y reproducir el número de
   **cuenca** (contrastar con [Hancock et al. 2025](antecedentes.md), ~5,9 % Argentina).

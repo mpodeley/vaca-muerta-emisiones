@@ -24,9 +24,13 @@ mkdocs serve   # http://127.0.0.1:8000
 
 ```bash
 # Producción por operador (denominador) + visualizaciones
-pip install pandas shapely folium matplotlib
+pip install pandas openpyxl shapely folium matplotlib
 python docs/pipeline/produccion_operador.py
 python docs/pipeline/produccion_visuals.py
+
+# Fase 2 — Flaring → CO₂ por operador (VIIRS Nightfire + producción 2024)
+python docs/pipeline/flaring_operador.py
+python docs/pipeline/flaring_visuals.py
 ```
 
 Datos de entrada en `docs/data/` (producción mensual por área×empresa y concesiones con operador,

@@ -18,9 +18,10 @@ completo) y se convierte a **BOE**:
 El resultado está en [Producción por operador](produccion.md) y en
 `docs/data/produccion_por_operador.csv`.
 
-## El numerador A: CO₂ de flaring por operador  🔜 Fase 2
+## El numerador A: CO₂ de flaring por operador  ✅ hecho
 
-El camino **más atribuible**, porque las antorchas son infraestructura fija y geolocalizada:
+El camino **más atribuible**, porque las antorchas son infraestructura fija y geolocalizada. **Ya está
+calculado** — [ver el resultado](flaring.md). El procedimiento:
 
 1. **VIIRS Nightfire** (Earth Observation Group) → lista de sitios de flaring activos con el **volumen
    de gas quemado** estimado (m³/año) por la radiancia/temperatura del foco.

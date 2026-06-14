@@ -19,15 +19,17 @@ Medir emisiones desde el espacio y atribuirlas a un operador no es igual de fác
 
 | Camino | Qué mide | ¿Atribuible a operador? |
 |---|---|---|
-| **Flaring → CO₂** (VIIRS Nightfire) | volumen de gas quemado por antorcha, geolocalizado | **Sí** — las antorchas son infraestructura fija; se cruzan con la concesión |
+| **Flaring → CO₂** (VIIRS Nightfire) ✅ | volumen de gas quemado por antorcha, geolocalizado | **Sí** — ya **calculado por operador**: ver [Flaring](flaring.md) |
 | **Metano de cuenca** (TROPOMI) | intensidad de CH₄ a escala de cuenca (~7 km) | **No directo** — sí da el número de cuenca; por clúster con inversión y error grande |
 | **Plumas puntuales** (EMIT, Sentinel-2) | emisiones grandes de un punto | **A veces** — alta resolución pero **cobertura esporádica** |
 
-!!! info "Qué entrega esta Fase 1"
-    Este sitio arranca por lo más firme: **la pregunta, los antecedentes verificados, la metodología y
-    el denominador** — la **producción por operador** (cuánto gas y petróleo produjo cada empresa, en
-    BOE). Sobre esa base, la **Fase 2** sumará el numerador satelital (flaring, metano). Ver
-    [Próximos pasos](proximos-pasos.md).
+!!! success "Lo que ya está calculado"
+    - **Denominador:** la [producción por operador](produccion.md) (gas, petróleo, BOE).
+    - **Flaring → CO₂ por operador:** [el resultado](flaring.md) — **113 antorchas, ~2,4 Mt CO₂ en
+      2024**, con la **intensidad por barril** de cada operadora (kg CO₂/BOE).
+
+    Queda pendiente (Fase 2) el **metano** (fugas/venteo): inversión TROPOMI por clúster y plumas EMIT.
+    Ver [Próximos pasos](proximos-pasos.md).
 
 ## Qué vas a encontrar
 
