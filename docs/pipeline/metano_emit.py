@@ -33,15 +33,17 @@ OUT_CSV = ROOT / "data" / "metano_emit_plumas.csv"
 LON0, LON1, LAT0, LAT1 = -70.6, -68.2, -39.2, -37.3
 
 CMR = "https://cmr.earthdata.nasa.gov/search/granules.umm_json"
-SHORT_NAME = "EMITL2BCH4PLM"  # EMIT L2B Estimated Methane Plume Complexes
+SHORT_NAME = "EMITL2BCH4PLM"  # EMIT L2B Estimated Methane Plume Complexes (catálogo curado de plumas)
+ENH_NAME = "EMITL2BCH4ENH"    # EMIT L2B Methane Enhancement (realce de CH₄ por escena → cobertura real)
+OUT_COV = ROOT / "data" / "metano_emit_cobertura.json"
 
 
-def fetch_plumes():
-    """Devuelve la lista de granules-pluma EMIT (UMM) que intersectan el AOI."""
+def fetch_all(short_name):
+    """Devuelve todos los granules (UMM) de una colección que intersectan el AOI (paginado)."""
     bbox = f"{LON0},{LAT0},{LON1},{LAT1}"  # CMR: W,S,E,N
     items, page = [], 1
     while True:
-        r = requests.get(CMR, params={"short_name": SHORT_NAME, "bounding_box": bbox,
+        r = requests.get(CMR, params={"short_name": short_name, "bounding_box": bbox,
                                        "page_size": 200, "page_num": page}, timeout=120)
         r.raise_for_status()
         batch = r.json().get("items", [])
@@ -50,6 +52,26 @@ def fetch_plumes():
             break
         page += 1
     return items
+
+
+def granule_date(umm):
+    t = umm.get("TemporalExtent", {})
+    return (t.get("SingleDateTime") or t.get("RangeDateTime", {}).get("BeginningDateTime", ""))[:10]
+
+
+def coverage():
+    """Cobertura REAL de EMIT sobre el AOI: escenas con producto de metano (CH4ENH) y fechas únicas.
+    Esto contextualiza el catálogo de plumas: muchas observaciones → pocas plumas = pocas fuentes
+    puntuales grandes, no falta de cobertura."""
+    scenes = fetch_all(ENH_NAME)
+    dates = sorted({granule_date(s["umm"]) for s in scenes if granule_date(s["umm"])})
+    cov = {"escenas": len(scenes), "fechas_unicas": len(dates),
+           "desde": dates[0] if dates else "", "hasta": dates[-1] if dates else "",
+           "por_anio": {}}
+    for d in dates:
+        cov["por_anio"][d[:4]] = cov["por_anio"].get(d[:4], 0) + 1
+    OUT_COV.write_text(json.dumps(cov, ensure_ascii=False, indent=0), encoding="utf-8")
+    return cov
 
 
 def plume_polygon(umm):
@@ -67,7 +89,7 @@ def main():
               ft["properties"].get("nombre", ""))
              for ft in json.loads(GEO.read_text(encoding="utf-8"))["features"]]
 
-    items = fetch_plumes()
+    items = fetch_all(SHORT_NAME)
     feats, rows = [], []
     for it in items:
         umm = it["umm"]
@@ -101,11 +123,14 @@ def main():
         w.writeheader()
         w.writerows(rows)
 
-    print(f"EMIT CH₄ sobre AOI Vaca Muerta: {len(rows)} pluma(s) catalogada(s)")
+    cov = coverage()
+    print(f"EMIT cobertura sobre AOI: {cov['escenas']} escenas CH4ENH · {cov['fechas_unicas']} fechas "
+          f"únicas ({cov['desde']} → {cov['hasta']})  por año: {cov['por_anio']}")
+    print(f"EMIT plumas catalogadas (CH4PLM): {len(rows)}")
     for r in rows:
         print(f"  · pluma {r['plume_id']:>5}  {r['fecha']}  ({r['lat']},{r['lon']})  "
               f"→ {r['concesion'] or '—'} / {r['operador']}")
-    print(f"OK → {OUT_GJ.name}, {OUT_CSV.name}")
+    print(f"OK → {OUT_GJ.name}, {OUT_CSV.name}, {OUT_COV.name}")
 
 
 if __name__ == "__main__":
