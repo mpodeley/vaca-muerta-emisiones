@@ -9,18 +9,21 @@ VIIRS Nightfire 2024 → 113 antorchas → CO₂ por operador e **intensidad por
 [Flaring](flaring.md). Posibles mejoras: **serie temporal** (2012–2024) para ver la tendencia, y afinar
 el factor de conversión por composición del gas.
 
-## 2. Metano de cuenca y por clúster  (lo siguiente, ambicioso)
+## 2. Metano de cuenca  ✅ hecho (capa de contexto)
 
-- Traer **TROPOMI / Sentinel-5P** XCH₄ sobre el AOI (Copernicus / GES DISC) y reproducir el número de
-  **cuenca** (contrastar con [Hancock et al. 2025](antecedentes.md), ~5,9 % Argentina).
-- Inversión **por clúster** (~50 km) con viento **ERA5-Land** → intensidad de CH₄ por sub-área, con
-  **barras de error explícitas** (±40 %).
-- Entregable: mapa de intensidad de metano por clúster, con caveats.
+- **TROPOMI / Sentinel-5P** XCH₄ medio 2019–2024 sobre el AOI (vía Google Earth Engine) → mapa de
+  **cuenca**, contrastado con [Hancock et al. 2025](antecedentes.md) (~5,9 % Argentina). Ver
+  [Metano](metano.md).
+- **Descartado por diseño:** la inversión **por clúster** (~50 km, ERA5-Land, ±40 %). A esa resolución
+  y con concesiones solapadas no distingue operadores → falsa precisión. El número robusto de intensidad
+  ya existe (Hancock et al. 2025) y se cita como contexto.
 
-## 3. Plumas puntuales  (validación)
+## 3. Plumas puntuales  ✅ hecho (validación)
 
-- Revisar el catálogo de plumas de **EMIT** (NASA) y eventos **Sentinel-2/Landsat** sobre el AOI.
-- Donde haya cobertura, cuantificar plumas individuales para **validar** los puntos 1 y 2.
+- Catálogo de plumas de **EMIT** (NASA, `EMITL2BCH4PLM`) consultado sobre el AOI vía CMR: **1 pluma**
+  catalogada (2023-01-29 → Río Neuquén / YPF). Ver [Metano](metano.md). Cobertura esporádica → sirve de
+  **validación puntual**, no de inventario.
+- Pendiente opcional: sumar eventos **Sentinel-2/Landsat** sobre *hot spots* conocidos.
 
 ## 4. Cruce final e integración
 
@@ -30,5 +33,5 @@ el factor de conversión por composición del gas.
   una vez que haya resultado de emisiones.
 
 !!! note "Dependencias"
-    Algunos datos requieren **registro gratuito**: VIIRS Nightfire (EOG), Earthdata (NASA) y Copernicus.
-    Nada de esto es de pago.
+    Algunos datos requieren **registro gratuito**: VIIRS Nightfire (EOG), Earthdata/CMR (NASA, EMIT) y
+    **Google Earth Engine** (TROPOMI, con un proyecto noncommercial). Nada de esto es de pago.
