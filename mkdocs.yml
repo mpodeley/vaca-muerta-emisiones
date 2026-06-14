@@ -1,0 +1,52 @@
+site_name: Emisiones de CO₂ y metano en Vaca Muerta
+site_description: >-
+  Experimento: estimar la huella de emisión (CO₂ por flaring, metano) por operador y por
+  barril/m³ producido en Vaca Muerta, cruzando datos satelitales públicos con la producción
+  por concesión. Fase 1: factibilidad, antecedentes y producción por operador.
+site_url: https://mpodeley.github.io/vaca-muerta-emisiones/
+repo_url: https://github.com/mpodeley/vaca-muerta-emisiones
+repo_name: mpodeley/vaca-muerta-emisiones
+
+theme:
+  name: material
+  custom_dir: overrides
+  language: es
+  palette:
+    - scheme: default
+      primary: blue grey
+      accent: red
+      toggle:
+        icon: material/weather-night
+        name: Modo oscuro
+    - scheme: slate
+      primary: blue grey
+      accent: red
+      toggle:
+        icon: material/weather-sunny
+        name: Modo claro
+  features:
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
+    - toc.follow
+
+nav:
+  - Inicio: index.md
+  - Antecedentes y datos: antecedentes.md
+  - Metodología: metodologia.md
+  - Producción por operador: produccion.md
+  - Próximos pasos: proximos-pasos.md
+  - Referencias: referencias.md
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - tables
+  - attr_list
+  - md_in_html
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/mpodeley/vaca-muerta-emisiones
