@@ -66,22 +66,51 @@ sola pluma** confirmada sobre Vaca Muerta:
     El único evento sólido es atribuible (Río Neuquén / YPF); el resto del metano lo capta TROPOMI a
     escala de cuenca, no EMIT por punto.
 
-!!! tip "Se puede ir más profundo (pendiente)"
-    El catálogo `CH4PLM` es **conservador** (plumas validadas). Con las 421 escenas de realce
-    `CH4ENH` (descarga con login de Earthdata) se puede armar un **compuesto propio de realce de CH₄** y
-    buscar emisiones **por debajo del umbral del catálogo** — un mapa de metano a 60 m hecho en casa.
-    Es el siguiente paso natural de esta capa.
+### Fuimos más profundo: el compuesto propio (y por qué no alcanza)
+
+El catálogo `CH4PLM` es **conservador** (solo plumas validadas a mano). ¿Y si apilamos las **401 escenas
+de realce crudo `CH4ENH`** (60 m) y buscamos emisiones **por debajo del umbral del catálogo**? La física
+invita: el realce del *matched filter* tiene ruido simétrico (±cientos de ppm·m por escena) que **se
+cancela al promediar** decenas de pasadas (hasta **42 escenas por píxel** acá). Lo hicimos:
+
+![Compuesto EMIT de realce de metano, 401 escenas 2022–2026](assets/metano_emit_composite_resumen.png){ loading=lazy }
+
+El resultado es un **negativo honesto y muy instructivo**:
+
+- **El realce persistente calca el terreno, no las fuentes.** El mapa medio dibuja lineamientos,
+  escarpas y drenajes: son **artefactos de superficie** del *matched filter* (correlacionan con
+  albedo/mineralogía), no metano. Los "hotspots" caen en **sierras** (Chihuido de la Sierra Negra) y en
+  el **borde oeste fuera de concesión**, no en los campos productivos.
+- **El centro productivo no muestra nada** (Loma Campana: media −61 ppm·m).
+- **El compuesto pierde la única pluma real.** En la ubicación de la pluma #596 la media es −26 ppm·m:
+  fue un **evento episódico** (una pasada), y promediar 42 escenas lo **borra**.
+
+??? note "Ver los tres estadísticos (media · máximo · persistencia)"
+    ![Compuesto EMIT: media, máximo y persistencia](assets/metano_emit_composite.png){ loading=lazy }
+
+    El **máximo** por píxel y la **persistencia** (nº de escenas con realce > 1000 ppm·m) tampoco aíslan
+    fuentes: encienden en los mismos bordes y sierras que la media → confirma que el problema es de
+    artefactos de superficie, no de elección del estadístico.
+
+!!! quote "La lección (corregida y más profunda)"
+    EMIT **sí tiene cobertura** para metano en Vaca Muerta (132 fechas). Pero apilar el realce **no**
+    entrega un mapa de metano: la **media** cancela las plumas episódicas y deja **artefactos de
+    superficie**; el **máximo/persistencia** capta esos artefactos y el ruido. Por eso la detección
+    seria se hace **escena por escena y curada** (el catálogo `CH4PLM`), no por compuesto automático. El
+    resultado robusto sigue siendo **1 pluma → Río Neuquén / YPF**. Ir más profundo confirmó *por qué* el
+    catálogo es conservador — no lo reemplazó.
 
 ## Qué aporta esta capa
 
 - **TROPOMI** pone a Vaca Muerta en el mapa de metano de cuenca y enlaza con el ~5,9 % de
   [Hancock et al. 2025](antecedentes.md): el contexto regional es real.
 - **EMIT** aporta un punto de verdad a 60 m (pluma #596 → Río Neuquén / YPF) y, con 132 fechas y 1 sola
-  pluma, sugiere que el metano de Vaca Muerta es **difuso**, no de pocos *ultra-emisores*.
+  pluma —más el **compuesto de 401 escenas** que solo revela artefactos—, sugiere que el metano de Vaca
+  Muerta es **difuso**, no de pocos *ultra-emisores* detectables por punto.
 - **Lo que sigue sólido y por operador es el [flaring → CO₂](flaring.md).** El metano queda como capa de
   **contexto de cuenca**, explícitamente no repartida por empresa.
 
-> Reproducible: `python docs/pipeline/metano_tropomi.py --project <tu-proyecto-GEE>` (TROPOMI vía Earth
-> Engine), `python docs/pipeline/metano_emit.py` (plumas + cobertura EMIT vía CMR, sin login) y
-> `metano_visuals.py`. Datos en `docs/data/metano_tropomi_grid.json`, `metano_emit_plumas.geojson` y
-> `metano_emit_cobertura.json`.
+> Reproducible: `metano_tropomi.py --project <tu-proyecto-GEE>` (TROPOMI vía Earth Engine);
+> `metano_emit.py` (plumas + cobertura EMIT vía CMR, sin login); `metano_emit_composite.py` (apila las
+> 401 escenas `CH4ENH`, requiere login Earthdata en `~/.netrc`) + `metano_composite_fig.py`;
+> `metano_visuals.py`. Datos en `docs/data/metano_*.{json,geojson,csv}`.
